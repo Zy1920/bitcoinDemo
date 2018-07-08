@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8"/>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="css/pb.css"/>
+    <script src="js/jquery-1.12.4.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/bootstrap.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/pb.js" type="text/javascript" charset="utf-8"></script>
+    <script src="js/jsrsasign-all-min.js" type="text/javascript" charset="utf-8"></script>
+</head>
+<style>
+    body {
+        margin: 30px;
+    }
+
+</style>
+
+<body>
+    <label>发送方的私钥</label>
+    <textarea class="form-control" id="senderPrivateKey">-----BEGIN PRIVATE KEY-----
+MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDPIzB3hxatIJmPXGnnBmNoFWVE
+osrwzo+WfE9WTeQxmluyrFTke0CFBoX5HAMVlPj6B55lqv/lbq3ooHOYKqnsM0fBe09EC+iaYIn/
+le8O+XCZnOqq/rS6rgv2YBlwepE19t+hIXXyL34oGSv0zWrTlqRc+jP0d3y4bClvJUZN7fqYgWxB
+9CoE2+vjxPmeGXQNQgPUmvTfJbIxmoV3X/cSKkLL/B0s7pEWB5wbfEFXCt+aIbWm5otp7SVgxG5E
+baYS957rR5eVWIEmNa6YiYZpJdPXlm3tLz26nO93vqJh5wFIQaSa9zBdaqmpRIvWMUxo0pE8Id+j
+sKP/ZE0hc7kNAgMBAAECggEAVe2AJqWYp5tVeJ5apGcHB9+QUgfCbmESOdg5xVCssFMbZSSOVvY2
+TrjlDPEs6mARZQ+SCxUD8PaYGF+vdFmGgiDHzKDNwim6hYg01x0ovaqGpoLs6qCc8rBO8BbvlrSR
+1rQiEyLhXeWLzTCcBoLMpRfh+Vwl/20uBQeBrMTmxF6McM4QmS9dKpcDuiLYmpeCnnq203H4vcqa
+AYCb08RbaIbPNYfyBPg1qdM+QsBTPJYxcGdJA1YKXyhp5vJ4INElZRFTcYEoi1mVt8olklJm5JHc
+hZDf8rUzr0rGG0zJ6ECON6TmdAtoYXS21Dd+NX2cBCC35l7yPeGkO2ZhJRIU4QKBgQDzsAMz6jQz
+KBeEtM5y7Gf4HtmtmascSg3SEOjqcb9SJ+CnUZHsiQJnGKD2QWrN9s2eTozj/OGhJrDnW0FxQicd
+vRbaB33U2lke5zq6Z0WvPxQLt+e4M0wzqSuRSCAfRPu9ClKlcvMK89Z+j0A1bDoPTHxM0AQiaSns
+XPztz64AhQKBgQDZmmsEOxZMebmn90d68ED+065acnxADPC0q7DeNBhVK4Cl3HIytAp/TQaZ5KpV
+Ue6Sj7hS5YK6gsmnuaHE9ejNEnqgRYONcs1HeNgx7jPeVJOoz4cIyBD8rG4kz+Amp35rZvzFk40e
+3CeuTvr7sqH/dwI6ErD8JlRW2B4qSGRA6QKBgFneOoAlyhRnn6zAJTa6umkFr49XEYSARvKGa+8x
+/bWloTLzYRZTPMCak5ndbC8C6reMDmdx9h/BLhJUVCEZnWVZO5kylBQwZheAfOcLeOZ1I8ZijyEe
+Qeb3Z2rPp5EAlroTmYEMkFckr6DC4ZISFKNZuKl3OV8bW2ugq2Jkaa4lAoGBAJqX+i+nStBKKnwK
+Ud4lkgd4nAXmEB/xEZFJ6P30RNU9cshjNT6QamTGdEohCmJTMwssz+cU5ytaf6mJWER18E7BMh1r
+RWrYhL6iO/Y9JNxvefgUd/rlKCxa1GWSycysckQbhrlXeorSHd7YfbcT0cOM6SgY32REVubb45Jm
+m9MBAoGBANqJxh4pZ8gan1zyxaKISjeM4vk2Yz9EcxaTx2hgorzhVt7A5E6l4GgzPnIcHOg85p1H
+pkQpvvWVAgZE+5UREz71566BpGTAYGzK6WLd2XSmS/2/ubc+/tIuRHZz2d9C9E/eH/1WMLJtLtxa
+XeMX1YpA5AtHWleqHfU3Gv7DJUrd
+-----END PRIVATE KEY-----</textarea>
+    <label>发送方的公钥</label>
+    <textarea class="form-control" id="senderPublicKey">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzyMwd4cWrSCZj1xp5wZjaBVlRKLK8M6P
+lnxPVk3kMZpbsqxU5HtAhQaF+RwDFZT4+geeZar/5W6t6KBzmCqp7DNHwXtPRAvommCJ/5XvDvlw
+mZzqqv60uq4L9mAZcHqRNfbfoSF18i9+KBkr9M1q05akXPoz9Hd8uGwpbyVGTe36mIFsQfQqBNvr
+48T5nhl0DUID1Jr03yWyMZqFd1/3EipCy/wdLO6RFgecG3xBVwrfmiG1puaLae0lYMRuRG2mEvee
+60eXlViBJjWumImGaSXT15Zt7S89upzvd76iYecBSEGkmvcwXWqpqUSL1jFMaNKRPCHfo7Cj/2RN
+IXO5DQIDAQAB</textarea>
+    <label>接收方的公钥</label>
+    <textarea class="form-control" id="receiverPublicKey">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjivaB5Vp1lAjYP1xHCrNanLvhe27aMgL
+rlAPsrmS2P4tYKjH2pVV76j11yWt1mNSrsP1WWs2+FzEkjobpyROYJsn+0sjItU/kIELgDvm7Ih7
+OP14tuXry1BNS6qmh7Hop8eZaE+piZJtkfuVX+a0W9tVTBy6To43wBgYv2175zCcSGvwDIjqPc15
+7eH8Oji+iQQC3Wf2D4qrFbJtoNpVddug0Ei4u/YOLdlKs8c9UOReZG333/xGYG1U208joEPKmcP7
+PZd4EoQsb1PJhgheVDpt8dWmPTGXX2n7l0nAlvFx2zHjOa7g07xbWbzNDPBjONKHzu3ljLvAyOrq
+c9bzvwIDAQAB</textarea>
+    <label>转账信息</label>
+    <br>
+    <input type="text" class="form-control" id="idinput" placeholder="请输入内容..." style="width: 500px">
+
+    <div class="btn-group" role="group" aria-label="...">
+        <button type="button" class="btn btn-default" onclick="addGenesis()">添加封面</button>
+        <button type="button" class="btn btn-default" onclick="addNote()">添加记录</button>
+        <button type="button" class="btn btn-default" onclick="check()">检验数据</button>
+    </div>
+
+
+    <!--输入框-->
+    <input type="text" class="form-control" id="idNode" placeholder="请输入节点">
+    <!--按钮组-->
+    <div class="btn-group btn-group-lg">
+        <button type="button" class="btn btn-default" onclick="regist()">注册节点</button>
+        <button type="button" class="btn btn-default" onclick="conn()">连接节点</button>
+        <button type="button" class="btn btn-default" onclick="broadcast()">广播</button>
+        <button type="button" class="btn btn-default" onclick="syncData()">同步</button>
+    </div>
+
+    <!--用于展示结果-->
+    <p class="bg-info" id="result" style="padding: 15px;font-size: 20px"></p>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>编号</th>
+            <th>内容</th>
+            <th>哈希值</th>
+            <th>工作量证明</th>
+            <th>上一个hash</th>
+        </tr>
+        </thead>
+        <tbody id="idTbody">
+
+        </tbody>
+    </table>
+
+
+
+
+
+    <script>
+
+        function addGenesis() {
+            // 显示进度条
+            loading.baosight.showPageLoadingMsg(false);
+            //获取用户输入的内容
+            var content=$("#idinput").val();
+            //发起请求
+            $.post("/addGenesis","genesis="+content,function (data) {
+                //清空输入框
+               $("#idinput").val("");
+                // 展示结果
+               $("#result").text(data);
+                // 隐藏进度条
+                loading.baosight.hidePageLoadingMsg();
+                // 查询最新的数据
+                showList();
+            })
+
+        }
+
+        function addNote() {
+            //
+            var senderPri=$("#senderPrivateKey").val();
+            var senderPub=$("#senderPublicKey").val();
+            var receiverPub=$("#receiverPublicKey").val();
+            var content=$("#idinput").val();
+
+            //使用js库生成签名信息
+            var prvKey = KEYUTIL.getKey(senderPri);
+            var sig = new KJUR.crypto.Signature({"alg": "SHA256withRSA"});
+            sig.init(prvKey);
+            sig.updateString(content)
+            var sigValueHex = sig.sign()
+            //console.log(sigValueHex);
+
+            // 显示进度条
+            loading.baosight.showPageLoadingMsg(false);
+            //发起请求
+            $.post("/addNote",{
+                senderPublicKey:senderPub,
+                receiverPublicKey:receiverPub,
+                signature:sigValueHex,
+                content:content
+
+            },function (data) {
+                //清空输入框
+                $("#idinput").val("");
+                // 展示结果
+                $("#result").text(data);
+                // 隐藏进度条
+                loading.baosight.hidePageLoadingMsg();
+                // 查询最新的数据
+                showList();
+            })
+
+        }
+
+
+        function addNote2() {
+            // 显示进度条
+            loading.baosight.showPageLoadingMsg(false);
+            //获取用户输入的内容
+            var content=$("#idinput").val();
+            //发起请求
+            $.post("/addNote","note="+content,function (data) {
+                //清空输入框
+                $("#idinput").val("");
+                // 展示结果
+                $("#result").text(data);
+                // 隐藏进度条
+                loading.baosight.hidePageLoadingMsg();
+                // 查询最新的数据
+                showList();
+            })
+
+        }
+
+        function showList() {
+            // 显示进度条
+            loading.baosight.showPageLoadingMsg(false);
+            //发起请求
+            $.get("/showList",function (data) {
+                //清空输入框
+                $("#idTbody").html("");
+                // 展示结果 <tr><th>编号</th><th>内容</th><th>哈希值</th></tr>
+               for (var i=0;i<data.length;i++){
+                   var  block=data[i];
+                   var id=block.id;
+                   var content=block.content;
+                   var hash=block.hash;
+                   var nonce=block.nonce;
+                   var preHash=block.preHash;
+                   $("#idTbody").append("<tr><th>"+id+"</th><th>"+content+"</th><th>"+hash+"</th><th>"+nonce+"</th><th>"+preHash+"</th></tr>")
+                }
+            })
+            // 隐藏进度条
+            loading.baosight.hidePageLoadingMsg();
+        }
+
+        function check(){
+            // 显示进度条
+            loading.baosight.showPageLoadingMsg(false);
+            $.get("/check",function (data) {
+                //显示检测结果
+                $("#result").text(data);
+                // 隐藏进度条
+                loading.baosight.hidePageLoadingMsg();
+            })
+        }
+
+        function regist() {
+            // 显示进度条
+            loading.baosight.showPageLoadingMsg(false);
+            //获取用户输入的内容
+            var content=$("#idNode").val();
+            //发起请求
+            $.post("/regist","node="+content,function (data) {
+                // 展示结果
+                $("#result").text(data);
+                //清空输入框
+                $("#idinput").val("");
+                // 隐藏进度条
+                loading.baosight.hidePageLoadingMsg();
+            })
+        }
+
+        function  conn() {
+            // 显示进度条
+            loading.baosight.showPageLoadingMsg(false);
+            //发起请求
+            $.post("/conn",function (data) {
+                // 展示结果
+                $("#result").text(data);
+                // 隐藏进度条
+                loading.baosight.hidePageLoadingMsg();
+            })
+        }
+
+        function broadcast() {
+            // 显示进度条
+            loading.baosight.showPageLoadingMsg(false);
+            //获取用户输入的内容
+            var content=$("#idNode").val();
+            //发起请求
+            $.post("/broadcast","msg="+content,function (data) {
+                //清空输入框
+                $("#idinput").val("");
+                // 展示结果
+                $("#result").text(data);
+                // 隐藏进度条
+                loading.baosight.hidePageLoadingMsg();
+            })
+        }
+
+        function syncData(){
+            // 显示进度条
+            loading.baosight.showPageLoadingMsg(false);
+            //发起请求
+            $.post("/syncData",function (data) {
+                // 展示结果
+                $("#result").text(data);
+                // 隐藏进度条
+                loading.baosight.hidePageLoadingMsg();
+            })
+        }
+
+
+        $(function () {
+            showList();
+        })
+        
+    </script>
+
+</body>
